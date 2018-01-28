@@ -19,6 +19,14 @@ public abstract class DBIndex {
 	protected int[] rows;
 	protected int length;
 
+	public int[] getRows ( ) {
+		return rows;
+	}
+
+	public int getRowsLength ( ) {
+		return length;
+	}
+
 	protected DBIndex ( ) {
 		this(INITIAL_ROWS_CAPACITY);
 	}

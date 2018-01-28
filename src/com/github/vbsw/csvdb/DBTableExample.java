@@ -8,6 +8,7 @@
 
 package com.github.vbsw.csvdb;
 
+
 /**
  * @author Vitali Baumtrok
  */
@@ -69,6 +70,24 @@ public class DBTableExample extends DBTable {
 		ensureCapacity();
 		length += 1;
 		return row;
+	}
+
+	@Override
+	public String toString ( ) {
+		final StringBuilder stringBuilder = new StringBuilder(1024 - 64 * 4);
+		final int[] rows = lastNameIndex.getRows();
+		final int rowsLength = lastNameIndex.getRowsLength();
+		for(int i=0;i<rowsLength;i+=1) {
+			final int row = rows[i];
+			stringBuilder.append('[');
+			stringBuilder.append(firstNames[row]);
+			stringBuilder.append(", ");
+			stringBuilder.append(lastNames[row]);
+			stringBuilder.append(", ");
+			stringBuilder.append(ages[row]);
+			stringBuilder.append("]\n");
+		}
+		return stringBuilder.toString();
 	}
 
 	protected void ensureCapacity ( ) {
