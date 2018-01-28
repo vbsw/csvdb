@@ -12,10 +12,10 @@ package com.github.vbsw.csvdb;
 /**
  * @author Vitali Baumtrok
  */
-public class DBStringIndex extends DBIndex {
+public class DBStringIndexUnique extends DBIndex {
 
 	/**
-	 * Builds the index from a String array.
+	 * Builds the index from a String array. All values must be unique.
 	 * @param values the array from which the index is to be build
 	 */
 	public void buildIndex ( final String[] values ) {
@@ -23,14 +23,14 @@ public class DBStringIndex extends DBIndex {
 	}
 
 	/**
-	 * Builds the index from a String array.
+	 * Builds the index from a String array. All values must be unique.
 	 * @param values the array from which the index is to be build
 	 * @param from the initial index of the range to be build, inclusive
 	 * @param to the final index of the range to be copied, exclusive (This index may lie outside the array.)
 	 */
 	protected void buildIndexOfRange ( final String[] values, final int from, final int to ) {
 		for ( int i = from; i < to; i += 1 ) {
-			insertRow(values,i);
+			addRow(values,i);
 		}
 	}
 
@@ -49,7 +49,7 @@ public class DBStringIndex extends DBIndex {
 	public void updateRow ( final String[] values, final int row, final String keyNew ) {
 		deleteRow(values,row);
 		values[row] = keyNew;
-		insertRow(values,row);
+		addRow(values,row);
 	}
 
 	public void deleteRow ( final String[] values, final int row ) {
@@ -61,7 +61,7 @@ public class DBStringIndex extends DBIndex {
 		}
 	}
 
-	public void insertRow ( final String[] values, final int row ) {
+	public void addRow ( final String[] values, final int row ) {
 		final String key = values[row];
 		final int index = DBArrays.indexedBinarySearchOfRange(super.rows,values,0,super.length,key);
 		if ( index < 0 ) {

@@ -19,16 +19,16 @@ public abstract class DBIndex {
 	protected int[] rows;
 	protected int length;
 
-	public DBIndex ( ) {
+	protected DBIndex ( ) {
 		this(INITIAL_ROWS_CAPACITY);
 	}
 
-	public DBIndex ( final int initialCapacity ) {
+	protected DBIndex ( final int initialCapacity ) {
 		rows = new int[initialCapacity];
 		length = 0;
 	}
 
-	public void clearIndex ( ) {
+	protected void clearIndex ( ) {
 		length = 0;
 	}
 

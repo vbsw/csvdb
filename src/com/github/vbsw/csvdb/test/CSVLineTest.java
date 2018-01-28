@@ -31,8 +31,27 @@ class CSVLineTest extends CSVLine {
 		final String fileStr = "   asdf | qwer   |yxcv    ";
 		final byte[] fileBytes = fileStr.getBytes();
 		lineBegin = lineEnd = 0;
-		csv.readBytes(fileBytes,0,fileBytes.length);
+		csv.parseLine(fileBytes,0,fileBytes.length);
 
+		assertEquals(values.length,csv.getValuesCount());
+		assertEquals(3,csv.lineBegin);
+		assertEquals(fileBytes.length - 4,csv.lineEnd);
+		for ( int i = 0; i < values.length; i += 1 ) {
+			assertEquals(values[i],csv.getStringValue(i));
+		}
+	}
+
+	@Test
+	void testReadLineWithCustomSeparator ( ) {
+		final CSVLineTest csv = new CSVLineTest();
+		final String[] values = new String[] { "asdf", "qwer", "yxcv" };
+		final String fileStr = "   asdf {|} qwer   {|}yxcv    ";
+		final byte[] fileBytes = fileStr.getBytes();
+		lineBegin = lineEnd = 0;
+		csv.separator = new byte[] { '{', '|', '}' };
+		csv.parseLine(fileBytes,0,fileBytes.length);
+
+		assertEquals(values.length,csv.getValuesCount());
 		assertEquals(3,csv.lineBegin);
 		assertEquals(fileBytes.length - 4,csv.lineEnd);
 		for ( int i = 0; i < values.length; i += 1 ) {
@@ -45,6 +64,13 @@ class CSVLineTest extends CSVLine {
 		this.lineBegin = lineBegin;
 		this.lineEnd = lineEnd;
 		super.readLineWithDefaultSeparator(lineBegin,lineEnd);
+	}
+
+	@Override
+	protected void readLineWithCustomSeparator ( final int lineBegin, final int lineEnd ) {
+		this.lineBegin = lineBegin;
+		this.lineEnd = lineEnd;
+		super.readLineWithCustomSeparator(lineBegin,lineEnd);
 	}
 
 }

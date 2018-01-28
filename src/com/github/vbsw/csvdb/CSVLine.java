@@ -34,7 +34,7 @@ public class CSVLine {
 		return valueSlicesLength / 2;
 	}
 
-	public void readBytes ( final byte[] bytes, int lineBegin, int lineEnd ) {
+	public void parseLine ( final byte[] bytes, int lineBegin, int lineEnd ) {
 		lineBegin = DBParser.skipWhitespace(bytes,lineBegin,lineEnd);
 		lineEnd = DBParser.skipWhitespaceReverse(bytes,lineEnd,lineBegin);
 		this.bytes = bytes;
@@ -65,14 +65,25 @@ public class CSVLine {
 			addValue(left,right);
 			separatorIndex += 1;
 			left = DBParser.skipWhitespace(bytes,separatorIndex,lineEnd);
-			separatorIndex = searchForDefaultSeparator(separatorIndex,lineEnd);
+			separatorIndex = searchForDefaultSeparator(left,lineEnd);
 		}
 		right = DBParser.skipWhitespaceReverse(bytes,separatorIndex,left);
 		addValue(left,right);
 	}
 
 	protected void readLineWithCustomSeparator ( final int lineBegin, final int lineEnd ) {
-		// TODO Auto-generated method stub
+		int left = lineBegin;
+		int separatorIndex = searchForCustomSeparator(lineBegin,lineEnd);
+		int right;
+		while ( separatorIndex < lineEnd ) {
+			right = DBParser.skipWhitespaceReverse(bytes,separatorIndex,left);
+			addValue(left,right);
+			separatorIndex += separator.length;
+			left = DBParser.skipWhitespace(bytes,separatorIndex,lineEnd);
+			separatorIndex = searchForCustomSeparator(left,lineEnd);
+		}
+		right = DBParser.skipWhitespaceReverse(bytes,separatorIndex,left);
+		addValue(left,right);
 	}
 
 	protected void ensureValueSlicesCapacity ( ) {
@@ -98,6 +109,25 @@ public class CSVLine {
 			fromLeft += 1;
 		}
 		return fromLeft;
+	}
+
+	private int searchForCustomSeparator ( int fromLeft, final int toRight ) {
+		while ( fromLeft < toRight && !matchesCustomSeparator(fromLeft,toRight) ) {
+			fromLeft += 1;
+		}
+		return fromLeft;
+	}
+
+	private boolean matchesCustomSeparator ( final int fromLeft, final int toRight ) {
+		if ( toRight - fromLeft >= separator.length ) {
+			for ( int i = 0; i < separator.length; i += 1 ) {
+				if ( bytes[fromLeft + i] != separator[i] ) {
+					return false;
+				}
+			}
+			return true;
+		}
+		return false;
 	}
 
 }

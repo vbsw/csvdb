@@ -14,13 +14,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import com.github.vbsw.csvdb.DBStringIndex;
+import com.github.vbsw.csvdb.DBStringIndexUnique;
 
 
 /**
  * @author Vitali Baumtrok
  */
-class DBStringIndexTest extends DBStringIndex {
+class DBStringIndexTest extends DBStringIndexUnique {
 
 	@Test
 	void testBuildIndex ( ) {

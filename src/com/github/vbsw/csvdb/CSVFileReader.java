@@ -19,7 +19,7 @@ import java.nio.channels.SeekableByteChannel;
  */
 public class CSVFileReader {
 
-	protected static final int INITIAL_BUFFER_CAPACITY = 1000;
+	protected static final int INITIAL_BUFFER_CAPACITY = 1024 * 8 - 64 * 8;
 
 	protected ByteBuffer buffer;
 	protected CSVLine lineReader;
@@ -57,7 +57,7 @@ public class CSVFileReader {
 			readWholeLineIntoBuffer(channel);
 		}
 		if ( bytesRead > 0 ) {
-			lineReader.readBytes(buffer.array(),lineBegin,lineEnd);
+			lineReader.parseLine(buffer.array(),lineBegin,lineEnd);
 			lineNumber += 1;
 			return true;
 		}
