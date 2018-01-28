@@ -12,7 +12,7 @@ package com.github.vbsw.csvdb;
 /**
  * @author Vitali Baumtrok
  */
-public class DBStringIndexUnique extends DBIndex {
+public class DBIndexStringUnique extends DBIndex {
 
 	/**
 	 * Builds the index from a String array. All values must be unique.

@@ -20,7 +20,7 @@ public class DBExampleTable extends DBTable {
 	private int[] ages;
 	private int length;
 
-	private final DBStringIndexUnique lastNameIndex = new DBStringIndexUnique();
+	private final DBIndexStringUnique lastNameIndex = new DBIndexStringUnique();
 	private final DBFreeRowManager rowManager = new DBFreeRowManager();
 
 	public DBExampleTable ( ) {
