@@ -21,23 +21,23 @@ import java.nio.file.StandardOpenOption;
 /**
  * @author Vitali Baumtrok
  */
-public class DBExampleFileRead {
+public class CSVFileReaderExample {
 
-	public static void readFromFile ( final DBExampleTable exampleTable, final Path filePath ) throws IOException {
+	public static void readFromFile ( final DBTableExample exampleTable, final Path filePath ) throws IOException {
 		final CSVFileReader fileReader = new CSVFileReader();
 
 		/* try-block is here to auto close channel */
 		try ( final SeekableByteChannel channel = Files.newByteChannel(filePath,StandardOpenOption.READ) ) {
 			fileReader.initialize();
 			while ( fileReader.readNextLine(channel) ) {
-				DBExampleFileRead.createEntryFromCSV(exampleTable,fileReader.getLineNumber(),fileReader.getLineReader());
+				CSVFileReaderExample.createEntryFromCSV(exampleTable,fileReader.getLineNumber(),fileReader.getLineReader());
 			}
 		} catch ( IOException e ) {
 			throw e;
 		}
 	}
 
-	private static void createEntryFromCSV ( final DBExampleTable exampleTable, final int lineNumber, final CSVLine csv ) {
+	private static void createEntryFromCSV ( final DBTableExample exampleTable, final int lineNumber, final CSVLine csv ) {
 		final Charset encoding = StandardCharsets.UTF_8;
 
 		if ( csv.getValuesCount() == 3 ) {

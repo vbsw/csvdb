@@ -12,10 +12,10 @@ package com.github.vbsw.csvdb;
 /**
  * @author Vitali Baumtrok
  */
-public class DBIndexStringUnique extends DBIndex {
+public class DBIndexString extends DBIndex {
 
 	/**
-	 * Builds the index from a String array. All values must be unique.
+	 * Builds the index from a String array.
 	 * @param values the array from which the index is to be build
 	 */
 	public void buildIndex ( final String[] values ) {
@@ -23,7 +23,7 @@ public class DBIndexStringUnique extends DBIndex {
 	}
 
 	/**
-	 * Builds the index from a String array. All values must be unique.
+	 * Builds the index from a String array.
 	 * @param values the array from which the index is to be build
 	 * @param valuesFrom the left index of the range to be build, inclusive
 	 * @param valuesTo the right index of the range to be copied, exclusive (This index may lie outside the array.)
@@ -34,14 +34,15 @@ public class DBIndexStringUnique extends DBIndex {
 		}
 	}
 
-	public int searchRow ( final String[] values, final String key ) {
-		return searchRowOfRange(values,0,super.length,key);
+	public int searchRowIndexBegin ( final String[] values, final String key ) {
+		return searchRowIndexBeginOfRange(values,0,super.length,key);
 	}
 
-	protected int searchRowOfRange ( final String[] values, final int rowsFrom, final int rowsTo, final String key ) {
+	protected int searchRowIndexBeginOfRange ( final String[] values, final int rowsFrom, final int rowsTo, final String key ) {
 		final int rowIndex = DBArrays.indexedBinarySearchOfRange(super.rows,values,rowsFrom,rowsTo,key);
 		if ( rowIndex >= 0 ) {
-			return super.rows[rowIndex];
+			final int rowLeftIndex = DBArrays.indexedTrackLeft(super.rows,values,rowIndex,rowsFrom);
+			return rowLeftIndex;
 		}
 		return rowIndex;
 	}
@@ -54,10 +55,17 @@ public class DBIndexStringUnique extends DBIndex {
 
 	public void deleteRow ( final String[] values, final int row ) {
 		final String key = values[row];
-		final int index = DBArrays.indexedBinarySearchOfRange(super.rows,values,0,super.length,key);
-		if ( index >= 0 ) {
-			values[row] = null;
-			deleteIndex(index);
+		final int rowLeftIndex = searchRowIndexBegin(values,key);
+		if ( rowLeftIndex >= 0 ) {
+			if ( super.rows[rowLeftIndex] == row ) {
+				deleteIndex(rowLeftIndex);
+			} else {
+				for ( int rowIndex = rowLeftIndex + 1; rowIndex < super.length && values[super.rows[rowIndex]].equals(key); rowIndex += 1 ) {
+					if ( super.rows[rowIndex] == row ) {
+						deleteIndex(rowIndex);
+					}
+				}
+			}
 		}
 	}
 

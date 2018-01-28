@@ -11,7 +11,7 @@ package com.github.vbsw.csvdb;
 /**
  * @author Vitali Baumtrok
  */
-public class DBExampleTable extends DBTable {
+public class DBTableExample extends DBTable {
 
 	private static final int INITIAL_ARRAY_CAPACITY = 10;
 
@@ -23,11 +23,11 @@ public class DBExampleTable extends DBTable {
 	private final DBIndexStringUnique lastNameIndex = new DBIndexStringUnique();
 	private final DBFreeRowManager rowManager = new DBFreeRowManager();
 
-	public DBExampleTable ( ) {
+	public DBTableExample ( ) {
 		this(INITIAL_ARRAY_CAPACITY);
 	}
 
-	public DBExampleTable ( final int initialCapacity ) {
+	public DBTableExample ( final int initialCapacity ) {
 		firstNames = new String[initialCapacity];
 		lastNames = new String[initialCapacity];
 		ages = new int[initialCapacity];

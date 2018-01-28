@@ -70,14 +70,14 @@ public class DBArrays {
 	 * Searches a range of the specified array for the specified key using the binary search algorithm. The range must be sorted prior to making this call. If it is not sorted, the results are undefined. If the range contains multiple elements with the specified value, the lowest index is returned.
 	 * @param indices references to values in a sorted way
 	 * @param values the values to compare
-	 * @param from the indices index of the first element (inclusive) to be searched
-	 * @param to the indices index of the last element (exclusive) to be searched
+	 * @param indicesFrom the indices index of the first element (inclusive) to be searched
+	 * @param indicesTo the indices index of the last element (exclusive) to be searched
 	 * @param key the value to be searched for
 	 * @return index of indices of the search key, if it is contained in the array; otherwise, (-(insertion point) - 1). The insertion point is defined as the point at which the key would be inserted into the array: the index of the first element greater than the key, or a.length if all elements in the array are less than the specified key. Note that this guarantees that the return value will be >= 0 if and only if the key is found.
 	 */
-	public static int indexedBinarySearchOfRange ( final int[] indices, final String[] values, final int from, final int to, final String key ) {
-		int left = 0;
-		int right = to - 1;
+	public static int indexedBinarySearchOfRange ( final int[] indices, final String[] values, final int indicesFrom, final int indicesTo, final String key ) {
+		int left = indicesFrom;
+		int right = indicesTo - 1;
 
 		while ( left <= right ) {
 			final int middle = (left + right) / 2;
@@ -99,92 +99,106 @@ public class DBArrays {
 	/**
 	 * Searches for the most left index equal to the value of array[from].
 	 * @param array the array to be searched
-	 * @param fromRight the index of the first element (inclusive) to be searched
-	 * @param toLeft the index of the last element (inclusive) to be searched
+	 * @param arrayFromRight the index of the first element (inclusive) to be searched
+	 * @param arrayToLeft the index of the last element (inclusive) to be searched
 	 * @return the most left index equal to array[from]
 	 */
-	public static int trackLeft ( final String[] array, final int fromRight, final int toLeft ) {
-		if ( fromRight >= toLeft ) {
-			final String key = array[fromRight];
+	public static int trackLeft ( final String[] array, final int arrayFromRight, final int arrayToLeft ) {
+		if ( arrayFromRight >= arrayToLeft ) {
+			final String key = array[arrayFromRight];
 			int i;
-			for ( i = fromRight - 1; i >= toLeft; i -= 1 ) {
+			for ( i = arrayFromRight - 1; i >= arrayToLeft; i -= 1 ) {
 				if ( !array[i].equals(key) ) {
 					return i + 1;
 				}
 			}
 			return i + 1;
 		}
-		return fromRight;
+		return arrayFromRight;
+	}
+
+	public static int indexedTrackLeft ( final int[] indices, final String[] values, final int indicesFromRight, final int indicesToLeft ) {
+		if ( indicesFromRight >= indicesToLeft ) {
+			final String key = values[indices[indicesFromRight]];
+			int i;
+			for ( i = indicesFromRight - 1; i >= indicesToLeft; i -= 1 ) {
+				if ( !values[indices[i]].equals(key) ) {
+					return i + 1;
+				}
+			}
+			return i + 1;
+		}
+		return indicesFromRight;
 	}
 
 	/**
 	 * Searches for the most right index equal to the value of array[from].
 	 * @param array the array to be searched
-	 * @param fromLeft the index of the first element (inclusive) to be searched
-	 * @param toRight the index of the last element (exclusive) to be searched
+	 * @param arrayFromLeft the index of the first element (inclusive) to be searched
+	 * @param arrayToRight the index of the last element (exclusive) to be searched
 	 * @return the most right index not equal to array[from]
 	 */
-	public static int trackRight ( final String[] array, final int fromLeft, final int toRight ) {
-		if ( fromLeft < toRight ) {
-			final String key = array[fromLeft];
+	public static int trackRight ( final String[] array, final int arrayFromLeft, final int arrayToRight ) {
+		if ( arrayFromLeft < arrayToRight ) {
+			final String key = array[arrayFromLeft];
 			int i;
-			for ( i = fromLeft + 1; i < toRight; i += 1 ) {
+			for ( i = arrayFromLeft + 1; i < arrayToRight; i += 1 ) {
 				if ( !array[i].equals(key) ) {
 					return i;
 				}
 			}
 			return i;
 		}
-		return fromLeft + 1;
+		return arrayFromLeft + 1;
 	}
 
 	/**
 	 * Searches for the most left index starting with a certain prefix.
 	 * @param array the array to be searched
-	 * @param fromRight the index of the first element (inclusive) to be searched
-	 * @param toLeft the index of the last element (inclusive) to be searched
+	 * @param arrayFromRight the index of the first element (inclusive) to be searched
+	 * @param arrayToLeft the index of the last element (inclusive) to be searched
 	 * @param prefix the prefix to match
 	 * @return the most left index of a value with the prefix
 	 */
-	public static int trackLeftByPrefix ( final String[] array, final int fromRight, final int toLeft, final String prefix ) {
-		if ( fromRight >= toLeft ) {
+	public static int trackLeftByPrefix ( final String[] array, final int arrayFromRight, final int arrayToLeft, final String prefix ) {
+		if ( arrayFromRight >= arrayToLeft ) {
 			int i;
-			for ( i = fromRight - 1; i >= toLeft; i -= 1 ) {
+			for ( i = arrayFromRight - 1; i >= arrayToLeft; i -= 1 ) {
 				if ( !array[i].startsWith(prefix) ) {
 					return i + 1;
 				}
 			}
 			return i + 1;
 		}
-		return fromRight;
+		return arrayFromRight;
 	}
 
 	/**
 	 * Searches for the most right index starting with a certain prefix.
 	 * @param array the array to be searched
-	 * @param fromLeft the index of the first element (inclusive) to be searched
-	 * @param toRight the index of the last element (exclusive) to be searched
+	 * @param arrayFromLeft the index of the first element (inclusive) to be searched
+	 * @param arrayToRight the index of the last element (exclusive) to be searched
 	 * @param prefix the prefix to match
 	 * @return the most right index of a value without the prefix
 	 */
-	public static int trackRightByPrefix ( final String[] array, final int fromLeft, final int toRight, final String prefix ) {
-		if ( fromLeft < toRight ) {
+	public static int trackRightByPrefix ( final String[] array, final int arrayFromLeft, final int arrayToRight, final String prefix ) {
+		if ( arrayFromLeft < arrayToRight ) {
 			int i;
-			for ( i = fromLeft + 1; i < toRight; i += 1 ) {
+			for ( i = arrayFromLeft + 1; i < arrayToRight; i += 1 ) {
 				if ( !array[i].startsWith(prefix) ) {
 					return i;
 				}
 			}
 			return i;
 		}
-		return fromLeft + 1;
+		return arrayFromLeft + 1;
 	}
 
-	public static boolean indexedSorted ( final int[] indices, final String[] values, final int from, final int to ) {
-		final int fromStart = from + 1;
-		if ( fromStart < to ) {
-			String elementPrev = values[indices[from]];
-			for ( int i = fromStart; i < to; i += 1 ) {
+	public static boolean indexedSorted ( final int[] indices, final String[] values, final int indicesFrom, final int indicesTo ) {
+		final int fromStart = indicesFrom + 1;
+		if ( fromStart < indicesTo ) {
+			String elementPrev = values[indices[indicesFrom]];
+			for ( int i = fromStart; i < indicesTo; i += 1 ) {
 				final String elementCurr = values[indices[i]];
 				if ( elementPrev.compareTo(elementCurr) > 0 ) {
 					return false;
@@ -195,11 +209,11 @@ public class DBArrays {
 		return true;
 	}
 
-	public static boolean indexedSortedDesc ( final int[] indices, final String[] values, final int from, final int to ) {
-		final int fromStart = from + 1;
-		if ( fromStart < to ) {
-			String elementPrev = values[indices[from]];
-			for ( int i = fromStart; i < to; i += 1 ) {
+	public static boolean indexedSortedDesc ( final int[] indices, final String[] values, final int indicesFrom, final int indicesTo ) {
+		final int fromStart = indicesFrom + 1;
+		if ( fromStart < indicesTo ) {
+			String elementPrev = values[indices[indicesFrom]];
+			for ( int i = fromStart; i < indicesTo; i += 1 ) {
 				final String elementCurr = values[indices[i]];
 				if ( elementPrev.compareTo(elementCurr) < 0 ) {
 					return false;

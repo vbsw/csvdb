@@ -20,11 +20,11 @@ import com.github.vbsw.csvdb.DBIndexStringUnique;
 /**
  * @author Vitali Baumtrok
  */
-class DBStringIndexTest extends DBIndexStringUnique {
+class DBIndexStringUniqueTest extends DBIndexStringUnique {
 
 	@Test
 	void testBuildIndex ( ) {
-		final DBStringIndexTest index = new DBStringIndexTest();
+		final DBIndexStringUniqueTest index = new DBIndexStringUniqueTest();
 		final String[] values = new String[] { "ad", "ab", "ab", "af", "aa", "ah", "aj" };
 		final int[] indicesSorted = new int[] { 4, 2, 1, 0, 3, 5, 6 };
 		index.buildIndex(values);
@@ -36,7 +36,7 @@ class DBStringIndexTest extends DBIndexStringUnique {
 
 	@Test
 	void testSearchRow ( ) {
-		final DBStringIndexTest index = new DBStringIndexTest();
+		final DBIndexStringUniqueTest index = new DBIndexStringUniqueTest();
 		final String[] values = new String[] { "ad", "ab", "af", "aa", "ah", "aj" };
 		final int[] indicesSorted = new int[] { 3, 1, 0, 2, 4, 5 };
 		index.buildIndex(values);
